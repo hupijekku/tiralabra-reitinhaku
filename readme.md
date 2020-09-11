@@ -9,6 +9,7 @@ Reitinhakualgoritmien toiminnan ja tehokkuuden vertailua Javalla Tietorakenteet 
 ## Viikkoraportit
 
 * [Viikko 1](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/viikkoraportti1.md)  
+* [Viikko 2](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/viikkoraportti2.md)  
 
 ## Toiminnot  
 

@@ -9,9 +9,9 @@ Sovellus käyttää algoritmien testaamiseen kaksiulotteisia karttoja, joita se 
 ## Algoritmit ja tietorakenteet
 
 Leveyshakua varten tarvitaan jono ja muita varten keko. Keon toteutuksessa voidaan vielä veirtailla eri tapojen tehokkuuksia (binary/fibonacci).  
-
+Dijkstran algoritmin aikavaatimukseksi saadaan parhaimmillaan O(E + V\*log(V)) käyttämällä Fibonacci kekoa, missä V on solmujen ja E kaarien lukumäärä.  
 
 ## Lähteet
 
-* https://www.cs.helsinki.fi/u/ahslaaks/tirakirja/  
-* https://movingai.com/benchmarks/grids.html
+* Antti Laaksonen - Tietorakenteet ja Algoritmit, <https://www.cs.helsinki.fi/u/ahslaaks/tirakirja/>, haettu 11.9.2020  
+* Wikipedia, _Dijkstra's algorithm_, <https://en.wikipedia.org/wiki/Dijkstra's_algorithm>, haettu  11.9.2020  
