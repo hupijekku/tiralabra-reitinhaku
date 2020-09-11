@@ -14,8 +14,8 @@ import java.util.Scanner;
  * @author eemes
  */
 public class Kartta {
-    File kartta;
-    Scanner lukija;
+    private File kartta;
+    private Scanner lukija;
     
     public Kartta(File polku) {
         this.kartta = polku;
@@ -28,7 +28,7 @@ public class Kartta {
     }
     
     public char[][] luoTaulukko() {
-        if(lukija != null) { 
+        if (lukija != null) { 
             try {
                 // Rivi 1: tyyppi <- turha?
                 // Rivi 2: korkeus
@@ -37,17 +37,26 @@ public class Kartta {
                 lukija.nextLine(); // Skipataan tyyppi
                 int korkeus = Integer.parseInt(lukija.nextLine().substring(7));
                 int leveys = Integer.parseInt(lukija.nextLine().substring(6));
-                char[][] taulukko = new char[leveys][korkeus];
+                char[][] taulukko = new char[korkeus][leveys];
                 lukija.nextLine(); // Skipataan "map"
-                for(int i = 0; i < taulukko.length; i++) {
+                for (int i = 0; i < taulukko.length; i++) {
                     taulukko[i] = lukija.nextLine().toCharArray();
                 }
-            } catch(Exception e) {
+                return taulukko;
+            } catch (Exception e) {
                 // Väliaikainen ratkaisu
                 System.out.println(e);
                 return null;
             }
         }
         return null;
+    }
+    
+    public Scanner haeLukija() {
+        return this.lukija;
+    }
+    
+    public File haeKartta() {
+        return this.kartta;
     }
 }

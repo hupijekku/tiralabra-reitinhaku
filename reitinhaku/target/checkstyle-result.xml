@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="C:\Users\eemes\Desktop\temp\reitinhaku\src\main\java\dao\Kartta.java">
+<error line="31" column="11" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="42" column="20" severity="error" message="&apos;for&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="46" column="20" severity="error" message="&apos;catch&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\eemes\Desktop\temp\reitinhaku\src\main\java\hupijekku\reitinhaku\ui\Kayttoliittyma.java">
+</file>
+<file name="C:\Users\eemes\Desktop\temp\reitinhaku\src\main\java\main\Main.java">
+</file>
+<file name="C:\Users\eemes\Desktop\temp\reitinhaku\src\main\java\tietorakenteet\Solmu.java">
+</file>
+</checkstyle>

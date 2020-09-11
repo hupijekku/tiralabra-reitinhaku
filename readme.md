@@ -9,3 +9,27 @@ Reitinhakualgoritmien toiminnan ja tehokkuuden vertailua Javalla Tietorakenteet 
 ## Viikkoraportit
 
 * [Viikko 1](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/viikkoraportti1.md)  
+
+## Toiminnot  
+
+### Testaus
+
+Testit voi suorittaa komennolla
+
+```
+mvn test
+```
+
+Testikattavuuden raportti luodaan komennolla  
+
+```
+mvn test jacoco:report
+```  
+
+### Checkstyle
+
+Koodin tyylin tiedoston checkstyle.xml määrittelyn mukaan voi tarkistaa komennolla  
+
+```
+mvn jxr:jxr checkstyle:checkstyle
+```  

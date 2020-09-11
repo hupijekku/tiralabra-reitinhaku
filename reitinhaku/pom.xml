@@ -60,7 +60,7 @@
             <version>0.8.3</version>
             <configuration>
                 <excludes>
-                    <exclude>reitinhaku/hupijekku/ui/*</exclude>
+                    <exclude>hupijekku/reitinhaku/ui/*</exclude>
                 </excludes>
             </configuration>
             <executions>

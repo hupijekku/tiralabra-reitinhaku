@@ -19,11 +19,11 @@ public class Solmu {
         this.y = y;
     }
        
-    public int getX() {
+    public int haeX() {
         return x;
     }
     
-    public int getY() {
+    public int haeY() {
         return y;
     }
 }
