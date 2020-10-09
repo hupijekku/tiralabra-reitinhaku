@@ -46,4 +46,81 @@ public class SolmuTest {
          assertEquals(1, solmu.haeX());
          assertEquals(2, solmu.haeY());
      }
+     
+     @Test
+     public void etäisyysAlkuunPalauttaaOikeanArvon() {
+         Solmu solmu = new Solmu(1, 3, 10, null);
+         assertEquals(10, solmu.haeEtäisyysAlkuun(), 0.001);
+     }
+     
+     @Test
+     public void etäisyysMaaliinUudellaSolmullaNolla() {
+         Solmu solmu = new Solmu(1, 2, 3, null);
+         assertEquals(0, solmu.haeEtäisyysMaaliin(), 0.001);
+     }
+     
+     @Test
+     public void haeVanhempiPalauttaaOikeanSolmun() {
+         Solmu vanhempi = new Solmu(1, 2, 3, null);
+         Solmu solmu = new Solmu(4, 5, 6, vanhempi);
+         assertEquals(vanhempi, solmu.haeVanhempi());
+     }
+     
+     @Test
+     public void asetaEtäisyysAlkuunMuuttaaArvoa() {
+         Solmu solmu = new Solmu(1, 2, 3, null);
+         solmu.asetaEtäisyysAlkuun(5);
+         assertEquals(5, solmu.haeEtäisyysAlkuun(), 0.001);
+     }
+     
+     @Test
+     public void asetaMaaliinLoppuunMuuttaaArvoa() {
+         Solmu solmu = new Solmu(1, 2, 3, null);
+         solmu.asetaEtäisyysMaaliin(5);
+         assertEquals(5, solmu.haeEtäisyysMaaliin(), 0.001);
+     }
+     
+     @Test
+     public void asetaXVaihtaaKoordinaatin() {
+         Solmu solmu = new Solmu(1, 2, 3, null);
+         solmu.asetaX(4);
+         assertEquals(4, solmu.haeX());
+     }
+     
+     @Test
+     public void asetaYVaihtaaKoordinaatin() {
+         Solmu solmu = new Solmu(1, 2, 3, null);
+         solmu.asetaY(5);
+         assertEquals(5, solmu.haeY());
+     }
+     
+     @Test
+     public void laajempiKonstruktoriAsettaaArvot() {
+         Solmu vanhempi = new Solmu(1, 2, 3, null);
+         Solmu solmu = new Solmu(4, 5, 6, vanhempi);
+         
+         assertEquals(1, vanhempi.haeX());
+         assertEquals(5, solmu.haeY());
+         assertEquals(vanhempi, solmu.haeVanhempi());
+     }
+     
+     @Test
+     public void equalsKomparaattoriTunnistaaSamatSolmut() {
+         Solmu solmu1 = new Solmu(1, 2, 3, null);
+         Solmu solmu2 = new Solmu(1, 2, 3, null);
+         Solmu solmu3 = new Solmu(2, 3, 3, null);
+         
+         assertEquals(true, solmu1.equals(solmu2));
+         assertEquals(false, solmu2.equals(solmu3));
+     }
+     
+     @Test
+     public void compareToVertaaSolmujaOikein() {
+         Solmu solmu1 = new Solmu(1, 2, 3, null);
+         Solmu solmu2 = new Solmu(1, 2, 3, null);
+         Solmu solmu3 = new Solmu(2, 3, 4, null);
+         
+         assertEquals(0, solmu1.compareTo(solmu2));
+         assertEquals(-1, solmu2.compareTo(solmu3));
+     }
 }
