@@ -23,7 +23,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.AStar;
+import main.Leveyshaku;
 import tietorakenteet.Solmu;
+import tietorakenteet.Binäärikeko;
 
 /**
  *
@@ -69,7 +71,7 @@ public class Kayttoliittyma extends Application {
         
         Kartta kartta = new Kartta(new File("./kartat/arena2.map"));
         char[][] taulukko = kartta.luoTaulukko();
-        int pikselinKoko = piirtoAlueenKoko/Math.max(taulukko.length, taulukko[0].length);
+        int pikselinKoko = piirtoAlueenKoko/Math.max(taulukko.length, taulukko[0].length);        
         
         piirräKartta(taulukko, grafiikka, pikselinKoko);
         cbKartanValinta.setOnAction(event -> {
@@ -80,10 +82,15 @@ public class Kayttoliittyma extends Application {
             piirräKartta(taulukko2, grafiikka, pikselinKoko2);
             Solmu alku = new Solmu(85, 105);
             Solmu loppu = new Solmu(260, 110);
+            
+            
             AStar haku = new AStar(taulukko2, true);
+            Leveyshaku haku2 = new Leveyshaku(taulukko2);
+            
             double löytyi = haku.etsiReitti(alku, loppu);
-            int käyty = haku.haeKäyty();
+            System.out.println(löytyi);
             int[][] reitti = haku.haeReitti();
+            
             piirräReitti(taulukko, grafiikka, reitti, pikselinKoko2);
         });
         
@@ -119,7 +126,7 @@ public class Kayttoliittyma extends Application {
         for (int i = 0; i < merkit[0].length; i++) {
             for (int j = 0; j < merkit.length; j++) {
                 if (reitti[j][i] == 1) {
-                    Color polku = Color.BLUE;
+                    Color polku = Color.BLUEVIOLET;
                     grafiikka.setFill(polku);
                     grafiikka.fillRect(i * pikselinKoko, j * pikselinKoko, pikselinKoko, pikselinKoko);
                 } else if (reitti[j][i] == 2) {

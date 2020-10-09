@@ -73,6 +73,14 @@ public class Solmu implements Comparable<Solmu> {
         } return false;
     }
 
+    /**
+     * Vertaa tätä solmua parametrina annettuun solmuun.
+     * Mikäli annetun solmun etäisyys on suurempi, palauttaa 1.
+     * Mikäli etäisyydet ovat samat, palauttaa 0.
+     * Muuten palauttaa -1.
+     * @param solmu verrattava solmu.
+     * @return 1, 0 tai -1 solmun etäisyyksien perusteella.
+     */
     @Override
     public int compareTo(Solmu solmu) {
         if(solmu == null) {
