@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package algoritmit;
 
 import tietorakenteet.Jono;
 import tietorakenteet.Solmu;
@@ -19,6 +19,7 @@ public class Leveyshaku {
     char[][] taulukko;
     boolean[][] käyty;
     int[][] reitti;
+    int pituus = 0;
     public Leveyshaku(char[][] taulukko) {
         this.taulukko = taulukko;
         this.käyty = new boolean[taulukko.length][taulukko[0].length];
@@ -45,7 +46,7 @@ public class Leveyshaku {
             // Reitti löydettiin, merkataan se ja lopetetaan läpikäynti
             if (nykyinen.equals(loppu)) {
                 merkkaaReitti(nykyinen);
-                return 1;
+                return pituus;
             }
             
             // BFS toimii vain painottomissa verkoissa, eli ei kulmikkain siirtymistä
@@ -64,6 +65,7 @@ public class Leveyshaku {
      * @param loppu 
      */
     private void merkkaaReitti(Solmu loppu) {
+        pituus++;
         this.reitti[loppu.haeY()][loppu.haeX()] = 2;
         Solmu vanhempi = loppu.haeVanhempi();
         if(vanhempi != null) {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package algoritmit;
 
 import tietorakenteet.Binäärikeko;
 import tietorakenteet.Solmu;
@@ -124,7 +124,7 @@ public class AStar {
                 && !this.tilat[y][x]
                 && this.taulukko[y][x] == '.') {
             
-            // Liikutaanko lähemmäs kohti maalia?
+            // Onko lyhyempää reittiä vielä löytynyt?
             if(nykyinen.haeEtäisyysAlkuun() + etäisyys < this.etäisyydet[y][x]) {
                 double yhteensä = nykyinen.haeEtäisyysAlkuun() + etäisyys;
                 this.etäisyydet[y][x] = yhteensä;
