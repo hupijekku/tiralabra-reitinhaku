@@ -11,7 +11,7 @@ Testikattavuusraportin voi generoida komennolla `mvn test jacoco:report`. Raport
 
 ## Suorituskykytestit  
 
-Suorituskykytestit vertaavat kolmen eri algoritmin tehokkuutta kolmella eri kartalla. Jokainen algoritmi suorittaa 100:n satunnaisen reitin haun kaikilla kolmella kartalla ja mitatuista ajoista lasketaan keskiarvo.  
+Suorituskykytestit vertaavat kolmen eri algoritmin tehokkuutta kolmella eri kartalla. Jokainen algoritmi suorittaa 100:n satunnaisen reitin haun kaikilla kolmella kartalla ja mitatut ajat summataan yhteen.  
 Suorituskykytestit voi ajaa painamalla käyttöliittymästä nappia "Aja suorituskykytestit". Tulokset tulostetaan sekä komentoriville, että tiedostoon "suorituskykytestit.txt".  
 
 | Kartta      | Leveyshaku | A* (Manhattan) | A* (Euklidinen) | JPS (Manhattan) | JPS (Euklidinen) |
