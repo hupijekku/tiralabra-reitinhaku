@@ -27,6 +27,12 @@ public class AStar {
     long aikaAlussa;
     long aikaLopussa;
     
+    /**
+     * Konstruktori
+     * @param taulukko  Kartta-olion luoma taulukko käytettävästä kartasta
+     * @param kulmikkain Sallitaanko kulmikkain liikkuminen kartassa
+     * @param manhattan Käytetäänkö manhattan- vai euklidista etäisyyttä
+     */
     public AStar(char[][] taulukko, boolean kulmikkain, boolean manhattan) {
         this.kulmikkain = kulmikkain;
         this.manhattan = manhattan;

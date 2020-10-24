@@ -5,8 +5,9 @@ Reitinhakualgoritmien toiminnan ja tehokkuuden vertailua Javalla Tietorakenteet 
 ## Dokumentaatio
 
 * [Määrittelydokumentti](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)  
-* [Testauraportti](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/testausraportti.md)  
+* [Testausraportti](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/testausraportti.md)  
 * [Käyttöohje](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/käyttöohje.md)
+* [Toteutusdokumentti](https://github.com/hupijekku/tiralabra-reitinhaku/blob/master/dokumentaatio/toteutusdokumentti.md)
 
 ## Viikkoraportit
 

@@ -11,7 +11,7 @@ import tietorakenteet.Solmu;
 import tyokalut.Laskin;
 
 /**
- *
+ * Jump Point Search -algoritmin toteutus
  * @author eemes
  */
 public class JPS {
@@ -27,6 +27,12 @@ public class JPS {
     long aikaAlussa;
     long aikaLopussa;
     
+    
+    /**
+     * Konstruktori 
+     * @param taulukko Kartta-objektin luoma taulukko käytettävästä kartasta
+     * @param manhattan Käytetäänkö manhattan- vai euklidista etäisyyttä
+     */
     public JPS(char[][] taulukko, boolean manhattan) {
         this.taulukko = taulukko;
         this.manhattan = manhattan;
@@ -43,6 +49,12 @@ public class JPS {
         }
     }
     
+    /**
+     * Etsii reitin alkusolmusta loppusolmuun käyttäen JPS-algoritmia
+     * @param alku Reitin alkusolmu
+     * @param loppu Reitin loppusolmu
+     * @return 
+     */
     public double etsiReitti(Solmu alku, Solmu loppu) {
         this.aikaAlussa = System.nanoTime();
         this.keko.lisaa(alku);
@@ -64,11 +76,19 @@ public class JPS {
         return -1;
     }
     
-    
+    /**
+     * Palauttaa reitin etsimiseen kuluneen ajan nanosekuntteina.
+     * @return Kulunut aika nanosekuntteina
+     */
     public long kulunutAika() {
         return this.aikaLopussa - this.aikaAlussa;
     }
     
+    
+    /**
+     * Merkitsee rekursiivisesti käydyt solut ja reitin taulukkoon visualisointia varten
+     * @param solmu Loppusolmu, kun reitti on löydetty läpi
+     */
     private void merkkaaReitti(Solmu solmu) {
         Solmu vanhempi = solmu.haeVanhempi();
         if (vanhempi == null) {
@@ -106,11 +126,20 @@ public class JPS {
         }
     }
     
+    /**
+     * Palauttaa taulukon, johon on merkattu reitti ja käydyt solut visualisointia varten.
+     * @return 
+     */
     public int[][] haeReitti() {
         return this.reitti;
     }
     
-    public void haeSeuraavat(Solmu nykyinen, Solmu loppu) {
+    /**
+     * Etsii seuraavat algoritmin kannalta mielenkiintoiset solmut.
+     * @param nykyinen Solmu jossa algoritmi on tällä hetkellä
+     * @param loppu Reitin loppusolmu
+     */
+    private void haeSeuraavat(Solmu nykyinen, Solmu loppu) {
         this.naapurit = karsiNaapurit(nykyinen);
         for (int i = 0; i < this.naapurit.haeMaara(); i++) {
             Solmu naapuri = this.naapurit.haeIndeksi(i);
@@ -141,7 +170,12 @@ public class JPS {
         }
     }
 
-    public Lista karsiNaapurit(Solmu nykyinen) {
+    /**
+     * Karsii JPS-algorimin periaatteiden mukaisesti tutkittavat solmun naapureista ne, joita ei tarvitse tässä kohtaa huomioida
+     * @param nykyinen Tutkittava solmu
+     * @return Lista huomioitavista naapurisolmuista
+     */
+    private Lista karsiNaapurit(Solmu nykyinen) {
         Solmu vanhempi = nykyinen.haeVanhempi();
         if (vanhempi == null) {
             return kaikkiNaapurit(nykyinen);
@@ -207,6 +241,11 @@ public class JPS {
         return karsitutNaapurit;
     }
     
+    /**
+     * Etsii kaikki käsiteltävän solmun naapurit kiinnittämättä huomiota esteisiin
+     * @param nykyinen Käsiteltävä solmu
+     * @return Lista käsiteltävän solmun naapureista
+     */
     public Lista kaikkiNaapurit(Solmu nykyinen) {
         int x = nykyinen.haeX();
         int y = nykyinen.haeY();
@@ -227,7 +266,17 @@ public class JPS {
         return kaikkiNaapurit;
     }
     
+    /**
+     * Etsii seuraavan hyppypisteen
+     * @param x Nykyisen solmun x-koordinaatti
+     * @param y Nykyisen solmun y-koordinaatti
+     * @param vx x-koordinaatti josta tähän solmuun tultiin
+     * @param vy y-koordinaatti josta tähän solmuun tultiin
+     * @param loppu Reitin loppusolmu
+     * @return 2-alkioinen taulukko jossa on hyppypisteen koordinaatit
+     */
     public int[] hyppaa(int x, int y, int vx, int vy, Solmu loppu) {
+        // Solmu josta tähän tultiin ei välttämättä ole vieressä, sillä algoritmi hyppii pidempiä matkoja kerralla.
         int dx = (x - vx) / Laskin.maksimi(Laskin.itseisarvo(x - vx), 1);
         int dy = (y - vy) / Laskin.maksimi(Laskin.itseisarvo(y - vy), 1);
 
@@ -237,10 +286,12 @@ public class JPS {
             return piste;
         }
         
+        // Visualisointia varten merkataan solmu käydyksi, ellei se ole jo hyppypiste
         if (this.reitti[y][x] == 0) {
             this.reitti[y][x] = 1;
         }
         
+        // Ollaan reitin loppupisteessä, etsintä on ohi.
         if (x == loppu.haeX() && y == loppu.haeY()) {
             this.reittiLoytyi = true;
             piste[0] = y;
@@ -248,7 +299,7 @@ public class JPS {
             return piste;
         }
         
-        // Kulmikkain
+        // Liikuttiin kulmikkain
         if (dx != 0 && dy != 0) {
             if ((ruutuKelpaa(x - dx, y + dy) && !ruutuKelpaa(x - dx, y)) ||
                     (ruutuKelpaa(x + dx, y - dy) && !ruutuKelpaa(x, y - dy))) {
@@ -256,7 +307,7 @@ public class JPS {
                 piste[1] = x;
                 return piste;
             }
-        // Sivuttain
+        // Liikuttiin suoraan sivusuunnassa
         } else {
             // Pystysuunta
             if (dy != 0) {
@@ -297,6 +348,12 @@ public class JPS {
         
     }
     
+    /**
+     * Tarkistaa onko ruutu kartan sisällä, ja voidaanko siihen liikkua.
+     * @param x x-koordinaatti
+     * @param y y-koordinaatti
+     * @return true, jos ruutuun voi liikkua, muuten false.
+     */
     public boolean ruutuKelpaa(int x, int y) {
         // Rajat
         if (x < 0 || x >= this.taulukko[0].length || y < 0 || y >= this.taulukko.length) {

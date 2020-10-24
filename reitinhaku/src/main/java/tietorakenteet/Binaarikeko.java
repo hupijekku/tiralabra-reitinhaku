@@ -44,26 +44,48 @@ public class Binaarikeko {
         }
     }
     
+    /**
+     * Palauttaa annetun solmun vanhemman indeksin
+     * @param indeksi käsiteltävän solmun indeksi
+     * @return solmun vanhemman indeksi
+     */
     private int vanhempi(int indeksi) {
         return (indeksi - 1) / 2;
     }
     
+    /**
+     * Palauttaa käsiteltävän solmun vasemman lapsen indeksin
+     * @param indeksi käsiteltävän solmun indeksi
+     * @return solmun vasemman lapsen indeksi
+     */
     private int vasenLapsi(int indeksi) {
         return indeksi * 2 + 1;
     }
     
+     /**
+     * Palauttaa käsiteltävän solmun oikean lapsen indeksin
+     * @param indeksi käsiteltävän solmun indeksi
+     * @return solmun oikean lapsen indeksi
+     */
     private int oikeaLapsi(int indeksi) {
         return indeksi * 2 + 2;
     }
     
-    // Vaihtaa kahden solmun paikkaa puussa
+    /**
+     * Vaihtaa kahden solmun paikkaa puussa
+     * @param indeksiYksi Ensimmäisen vaihdettavan solmun indeksi
+     * @param indeksiKaksi Toisen solmun indeksi
+     */
     private void vaihda(int indeksiYksi, int indeksiKaksi) {
         Solmu vaihto = this.keko[indeksiYksi];
         this.keko[indeksiYksi] = this.keko[indeksiKaksi];
         this.keko[indeksiKaksi] = vaihto;
     }
     
-    // Korjaa rekursiivisesti puun rakenteen niin, etta jokainen solmu on pienempi kuin sen lapset.
+    /**
+     * Korjaa puun rakenteen rekursiivisesti niin, että pienin Solmu on puun juurena, lähtien annetusta indeksistä
+     * @param indeksi Korjaa indeksistä alaspäin
+     */
     private void korjaaRakenne(int indeksi) {
         int vasen = vasenLapsi(indeksi);
         int oikea = oikeaLapsi(indeksi);
@@ -90,6 +112,7 @@ public class Binaarikeko {
     public Solmu otaPaallimmainen() {
         return this.keko[0];
     }
+    
     /**
      * Palauttaa keon paallimmaisen, eli pienimman etaisyyden Solmu-olion
      * ja poistaa sen keosta.

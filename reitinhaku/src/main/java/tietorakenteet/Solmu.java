@@ -65,6 +65,12 @@ public class Solmu implements Comparable<Solmu> {
         this.etaisyysMaaliin = etaisyys;
     }
     
+    /**
+     * Vertaa annettua objektia tähän solmuun.
+     * Mikäli objekti on solmu, tarkistaa ovatko niiden koordinaatit samat
+     * @param o Objekti (Solmu)
+     * @return true jos annettu objekti on solmu jolla on samat koordinaatit, muuten false
+     */
     @Override
     public boolean equals(Object o) {
         if (o instanceof Solmu) {
