@@ -7,6 +7,8 @@ Sovelluksen testit voi ajaa komennolla `mvn test`.
 
 Testikattavuusraportin voi generoida komennolla `mvn test jacoco:report`. Raportti löytyy tämän jälkeen polusta `/target/site/jacoco/index.html`.  
 
+![Testikattavuus](https://raw.githubusercontent.com/hupijekku/tiralabra-reitinhaku/master/dokumentaatio/kuvat/testikattavuus.png)
+
 ## Suorituskykytestit  
 
 Suorituskykytestit vertaavat kolmen eri algoritmin tehokkuutta kolmella eri kartalla. Jokainen algoritmi suorittaa 100:n satunnaisen reitin haun kaikilla kolmella kartalla ja mitatuista ajoista lasketaan keskiarvo.  
