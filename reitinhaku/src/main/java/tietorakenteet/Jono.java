@@ -6,8 +6,8 @@
 package tietorakenteet;
 
 /**
- * Jonorakenne käyttäen hyväksi Listaa. 
- * Tarjoaa metodin ensimmäisen jäsenen toistuvalle hakemiselle.
+ * Jonorakenne kayttaen hyvaksi Listaa. 
+ * Tarjoaa metodin ensimmaisen jasenen toistuvalle hakemiselle.
  * @author eemes
  */
 public class Jono {
@@ -18,17 +18,17 @@ public class Jono {
         this.lista = new Lista();
     }
     
-    public Solmu otaEnsimmäinen() {
+    public Solmu otaEnsimmainen() {
         Solmu solmu = this.lista.haeIndeksi(0);
         this.lista.poistaIndeksi(0);
         return solmu;
     }
     
-    public void lisää(Solmu solmu) {
-        this.lista.lisää(solmu);
+    public void lisaa(Solmu solmu) {
+        this.lista.lisaa(solmu);
     }
     
-    public boolean onTyhjä() {
-        return this.lista.haeMäärä() == 0;
+    public boolean onTyhja() {
+        return this.lista.haeMaara() == 0;
     }
 }

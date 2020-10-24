@@ -13,8 +13,8 @@ public class Solmu implements Comparable<Solmu> {
     
     private int x;
     private int y;
-    private double etäisyysAlkuun;
-    private double etäisyysMaaliin;
+    private double etaisyysAlkuun;
+    private double etaisyysMaaliin;
     Solmu vanhempi;
     
     public Solmu(int x, int y) {
@@ -22,10 +22,10 @@ public class Solmu implements Comparable<Solmu> {
         this.y = y;
     }
     
-    public Solmu(int x, int y, double etäisyys, Solmu vanhempi) {
+    public Solmu(int x, int y, double etaisyys, Solmu vanhempi) {
         this.x = x;
         this.y = y;
-        this.etäisyysAlkuun = etäisyys;
+        this.etaisyysAlkuun = etaisyys;
         this.vanhempi = vanhempi;
     }
        
@@ -49,48 +49,52 @@ public class Solmu implements Comparable<Solmu> {
         return this.vanhempi;
     }
     
-    public double haeEtäisyysAlkuun() {
-        return etäisyysAlkuun;
+    public double haeEtaisyysAlkuun() {
+        return etaisyysAlkuun;
     }
     
-    public double haeEtäisyysMaaliin() {
-        return etäisyysMaaliin;
+    public double haeEtaisyysMaaliin() {
+        return etaisyysMaaliin;
     }
     
-    public void asetaEtäisyysAlkuun(double etäisyys) {
-        this.etäisyysAlkuun = etäisyys;
+    public void asetaEtaisyysAlkuun(double etaisyys) {
+        this.etaisyysAlkuun = etaisyys;
     }
     
-    public void asetaEtäisyysMaaliin(double etäisyys) {
-        this.etäisyysMaaliin = etäisyys;
+    public void asetaEtaisyysMaaliin(double etaisyys) {
+        this.etaisyysMaaliin = etaisyys;
     }
     
     @Override
     public boolean equals(Object o) {
         if (o instanceof Solmu) {
-            Solmu toinen = (Solmu)o;
+            Solmu toinen = (Solmu) o;
             return (toinen.haeX() == x && toinen.haeY() == y);
-        } return false;
+        } 
+        return false;
     }
 
     /**
-     * Vertaa tätä solmua parametrina annettuun solmuun.
-     * Mikäli annetun solmun etäisyys on suurempi, palauttaa 1.
-     * Mikäli etäisyydet ovat samat, palauttaa 0.
+     * Vertaa tata solmua parametrina annettuun solmuun.
+     * Mikali annetun solmun etaisyys on suurempi, palauttaa 1.
+     * Mikali etaisyydet ovat samat, palauttaa 0.
      * Muuten palauttaa -1.
      * @param solmu verrattava solmu.
-     * @return 1, 0 tai -1 solmun etäisyyksien perusteella.
+     * @return 1, 0 tai -1 solmun etaisyyksien perusteella.
      */
     @Override
     public int compareTo(Solmu solmu) {
-        if(solmu == null) {
+        if (solmu == null) {
             return 0;
         }
-        double toinen = (solmu.haeEtäisyysAlkuun() + solmu.haeEtäisyysMaaliin());
-        double tämä = this.etäisyysAlkuun + this.etäisyysMaaliin;
+        double toinen = (solmu.haeEtaisyysAlkuun() + solmu.haeEtaisyysMaaliin());
+        double tama = this.etaisyysAlkuun + this.etaisyysMaaliin;
         
-        if(tämä == toinen) return 0;
-        else return (tämä < toinen) ? -1 : 1;
+        if (tama == toinen) {
+            return 0;
+        } else {
+            return (tama < toinen) ? -1 : 1;
+        }
     }
     
     

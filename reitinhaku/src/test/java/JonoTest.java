@@ -55,20 +55,20 @@ public class JonoTest {
         Jono jono = new Jono();
         Solmu s1 = new Solmu(1, 2, 3, null);
         Solmu s2 = new Solmu(1, 2, 6, null);
-        jono.lisää(s1);
-        jono.lisää(s2);
-        assertEquals(true, jono.otaEnsimmäinen().equals(s1));
+        jono.lisaa(s1);
+        jono.lisaa(s2);
+        assertEquals(true, jono.otaEnsimmainen().equals(s1));
     }
     
     @Test
     public void onTyhjaPalauttaaOikeanArvon() {
         Jono jono = new Jono();
-        assertEquals(true, jono.onTyhjä());
+        assertEquals(true, jono.onTyhja());
         Solmu s1 = new Solmu(1, 2, 3, null);
         Solmu s2 = new Solmu(1, 2, 6, null);
-        assertEquals(true, jono.onTyhjä());
-        jono.lisää(s1);
-        jono.lisää(s2);
-        assertEquals(false, jono.onTyhjä());
+        assertEquals(true, jono.onTyhja());
+        jono.lisaa(s1);
+        jono.lisaa(s2);
+        assertEquals(false, jono.onTyhja());
     }
 }

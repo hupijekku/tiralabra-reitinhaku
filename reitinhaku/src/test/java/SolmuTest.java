@@ -48,15 +48,15 @@ public class SolmuTest {
      }
      
      @Test
-     public void etäisyysAlkuunPalauttaaOikeanArvon() {
+     public void etaisyysAlkuunPalauttaaOikeanArvon() {
          Solmu solmu = new Solmu(1, 3, 10, null);
-         assertEquals(10, solmu.haeEtäisyysAlkuun(), 0.001);
+         assertEquals(10, solmu.haeEtaisyysAlkuun(), 0.001);
      }
      
      @Test
-     public void etäisyysMaaliinUudellaSolmullaNolla() {
+     public void etaisyysMaaliinUudellaSolmullaNolla() {
          Solmu solmu = new Solmu(1, 2, 3, null);
-         assertEquals(0, solmu.haeEtäisyysMaaliin(), 0.001);
+         assertEquals(0, solmu.haeEtaisyysMaaliin(), 0.001);
      }
      
      @Test
@@ -67,17 +67,17 @@ public class SolmuTest {
      }
      
      @Test
-     public void asetaEtäisyysAlkuunMuuttaaArvoa() {
+     public void asetaEtaisyysAlkuunMuuttaaArvoa() {
          Solmu solmu = new Solmu(1, 2, 3, null);
-         solmu.asetaEtäisyysAlkuun(5);
-         assertEquals(5, solmu.haeEtäisyysAlkuun(), 0.001);
+         solmu.asetaEtaisyysAlkuun(5);
+         assertEquals(5, solmu.haeEtaisyysAlkuun(), 0.001);
      }
      
      @Test
      public void asetaMaaliinLoppuunMuuttaaArvoa() {
          Solmu solmu = new Solmu(1, 2, 3, null);
-         solmu.asetaEtäisyysMaaliin(5);
-         assertEquals(5, solmu.haeEtäisyysMaaliin(), 0.001);
+         solmu.asetaEtaisyysMaaliin(5);
+         assertEquals(5, solmu.haeEtaisyysMaaliin(), 0.001);
      }
      
      @Test

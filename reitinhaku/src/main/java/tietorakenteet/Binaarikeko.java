@@ -6,27 +6,27 @@
 package tietorakenteet;
 
 /**
- * Minimikeko toteutettuna binääripuuna.
- * Säilöö Solmu-olioita. Pienimmän etäisyyden solmu sijaitsee indeksissä 0.
+ * Minimikeko toteutettuna binaaripuuna.
+ * Sailöö Solmu-olioita. Pienimman etaisyyden solmu sijaitsee indeksissa 0.
  * @author eemes
  */
 public class Binaarikeko {
     
     private Solmu[] keko;
-    private int lukumäärä;
+    private int lukumaara;
     
     public Binaarikeko() {
-        this.lukumäärä = 0;
+        this.lukumaara = 0;
         this.keko = new Solmu[50];
     }
     
     /**
-     * Lisää parametrina annetun ruudun kekoon.
+     * Lisaa parametrina annetun ruudun kekoon.
      * @param solmu 
      */
-    public void lisää(Solmu solmu) {
-        // Jos keko on täynnä, laajennetaan sitä.
-        if (this.lukumäärä == this.keko.length) {
+    public void lisaa(Solmu solmu) {
+        // Jos keko on taynna, laajennetaan sita.
+        if (this.lukumaara == this.keko.length) {
             Solmu[] uusi = new Solmu[this.keko.length * 2];
             for (int i = 0; i < this.keko.length; i++) {
                 uusi[i] = this.keko[i];
@@ -34,8 +34,8 @@ public class Binaarikeko {
             this.keko = uusi;
         }
         
-        this.keko[this.lukumäärä] = solmu;
-        int indeksi = this.lukumäärä++;
+        this.keko[this.lukumaara] = solmu;
+        int indeksi = this.lukumaara++;
         
         // Sijoitetaan solmu ja vaihdetaan solmujen paikkoja kunnes solmu on oikealla paikalla.
         while (indeksi > 0 && this.keko[indeksi].compareTo(this.keko[vanhempi(indeksi)]) == -1) {
@@ -63,17 +63,17 @@ public class Binaarikeko {
         this.keko[indeksiKaksi] = vaihto;
     }
     
-    // Korjaa rekursiivisesti puun rakenteen niin, että jokainen solmu on pienempi kuin sen lapset.
+    // Korjaa rekursiivisesti puun rakenteen niin, etta jokainen solmu on pienempi kuin sen lapset.
     private void korjaaRakenne(int indeksi) {
         int vasen = vasenLapsi(indeksi);
         int oikea = oikeaLapsi(indeksi);
         
         int pienin = indeksi;
         
-        if (vasen < this.lukumäärä && this.keko[vasen].compareTo(this.keko[pienin]) == -1) {
+        if (vasen < this.lukumaara && this.keko[vasen].compareTo(this.keko[pienin]) == -1) {
             pienin = vasen;
         }
-        if (oikea < this.lukumäärä && this.keko[oikea].compareTo(this.keko[pienin]) == -1) {
+        if (oikea < this.lukumaara && this.keko[oikea].compareTo(this.keko[pienin]) == -1) {
             pienin = oikea;
         }
         if (pienin != indeksi) {
@@ -83,30 +83,30 @@ public class Binaarikeko {
     }
     
     /**
-     * Palauttaa keon päällimmäisen, eli pienimmän etäisyyden Solmu-olion
-     * poistamatta sitä kuitenkaan keosta.
+     * Palauttaa keon paallimmaisen, eli pienimman etaisyyden Solmu-olion
+     * poistamatta sita kuitenkaan keosta.
      * @return 
      */
-    public Solmu otaPäällimmäinen() {
+    public Solmu otaPaallimmainen() {
         return this.keko[0];
     }
     /**
-     * Palauttaa keon päällimmäisen, eli pienimmän etäisyyden Solmu-olion
+     * Palauttaa keon paallimmaisen, eli pienimman etaisyyden Solmu-olion
      * ja poistaa sen keosta.
      * @return 
      */
-    public Solmu poistaPäällimmäinen() {
+    public Solmu poistaPaallimmainen() {
         Solmu juuri = this.keko[0];
-        this.keko[0] = this.keko[--this.lukumäärä];
+        this.keko[0] = this.keko[--this.lukumaara];
         korjaaRakenne(0);
         return juuri;
     }
     
     /**
-     * Palauttaa true, jos keko on tyhjä, muulloin false.
+     * Palauttaa true, jos keko on tyhja, muulloin false.
      * @return 
      */
-    public boolean onTyhjä() {
-        return this.lukumäärä <= 0;
+    public boolean onTyhja() {
+        return this.lukumaara <= 0;
     }
 }

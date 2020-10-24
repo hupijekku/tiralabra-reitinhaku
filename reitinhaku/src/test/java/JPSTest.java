@@ -63,7 +63,7 @@ public class JPSTest {
         Solmu s3 = new Solmu(500, 500);
         assertEquals(-1, jps.etsiReitti(s1, s2), 0.0001);
         jps = new JPS(taulukko, false);
-        assertEquals(3768, jps.etsiReitti(s1, s3), 0.0001);
+        assertEquals(2847, jps.etsiReitti(s1, s3), 0.0001);
     }
     
     @Test

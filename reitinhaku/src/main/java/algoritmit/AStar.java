@@ -18,7 +18,7 @@ public class AStar {
     private char[][] taulukko;
     private int[][] reitti;
     private boolean[][] tilat;
-    private double[][] etäisyydet;
+    private double[][] etaisyydet;
     public boolean kulmikkain;
     private boolean manhattan;
     public Binaarikeko keko;
@@ -34,12 +34,12 @@ public class AStar {
         keko = new Binaarikeko();
         this.tilat = new boolean[taulukko.length][taulukko[0].length];
         this.reitti = new int[taulukko.length][taulukko[0].length];
-        this.etäisyydet = new double[taulukko.length][taulukko[0].length];
+        this.etaisyydet = new double[taulukko.length][taulukko[0].length];
         
-        // Alustetaan etäisyydet
+        // Alustetaan etaisyydet
         for (int i = 0; i < taulukko[0].length; i++) {
             for (int j = 0; j < taulukko.length; j++) {
-                etäisyydet[j][i] = 999999999;
+                etaisyydet[j][i] = 999999999;
             }
         }
     }
@@ -47,28 +47,28 @@ public class AStar {
     
     /**
      * Etsii reitin parametreina annetusta solmusta toiseen.
-     * @param alku Lähtösolmu
+     * @param alku Lahtosolmu
      * @param loppu Maalisolmu
-     * @return Palauttaa reitin pituuden, -1 jos reittiä ei löydy
+     * @return Palauttaa reitin pituuden, -1 jos reittia ei loydy
      */
     public double etsiReitti(Solmu alku, Solmu loppu) {
         this.aikaAlussa = System.nanoTime();
-        alku.asetaEtäisyysAlkuun(0);
-        this.etäisyydet[alku.haeY()][alku.haeX()] = 0;
-        keko.lisää(alku);
+        alku.asetaEtaisyysAlkuun(0);
+        this.etaisyydet[alku.haeY()][alku.haeX()] = 0;
+        keko.lisaa(alku);
         
-        while(!keko.onTyhjä()) {
-            Solmu nykyinen = keko.poistaPäällimmäinen();
+        while (!keko.onTyhja()) {
+            Solmu nykyinen = keko.poistaPaallimmainen();
             this.reitti[nykyinen.haeY()][nykyinen.haeX()] = 1;
             this.tilat[nykyinen.haeY()][nykyinen.haeX()] = true;
             
-            // Reitti löydettiin, merkkaa se ja palauta pituus
-            if(nykyinen.equals(loppu)) {
+            // Reitti loydettiin, merkkaa se ja palauta pituus
+            if (nykyinen.equals(loppu)) {
                 merkkaaReitti(nykyinen);
                 this.aikaLopussa = System.nanoTime();
-                return this.etäisyydet[nykyinen.haeY()][nykyinen.haeX()];
+                return this.etaisyydet[nykyinen.haeY()][nykyinen.haeX()];
             }
-            // Tarkista viereiset solmut ja lisää kekoon.
+            // Tarkista viereiset solmut ja lisaa kekoon.
             haeSeuraavat(nykyinen, loppu);
         }
         this.aikaLopussa = System.nanoTime();
@@ -76,13 +76,13 @@ public class AStar {
     }
     
     /**
-     * Kulkee reitin rekursiivisesti takaisin päin ja merkkaa sen taulukkoon
+     * Kulkee reitin rekursiivisesti takaisin pain ja merkkaa sen taulukkoon
      * @param solmu
      */
     private void merkkaaReitti(Solmu solmu) {
         this.reitti[solmu.haeY()][solmu.haeX()] = 2;
         Solmu vanhempi = solmu.haeVanhempi();
-        if(vanhempi != null) {
+        if (vanhempi != null) {
             merkkaaReitti(vanhempi);
         }
     }
@@ -94,61 +94,61 @@ public class AStar {
     // Siirry kaikkiin viereisiin solmuihin
     private void haeSeuraavat(Solmu nykyinen, Solmu loppu) {
         
-        käsittele(nykyinen.haeX() + 1, nykyinen.haeY(), nykyinen, loppu);
-        käsittele(nykyinen.haeX() - 1, nykyinen.haeY(), nykyinen, loppu);
-        käsittele(nykyinen.haeX(), nykyinen.haeY() + 1, nykyinen, loppu);
-        käsittele(nykyinen.haeX(), nykyinen.haeY() - 1, nykyinen, loppu);
+        kasittele(nykyinen.haeX() + 1, nykyinen.haeY(), nykyinen, loppu);
+        kasittele(nykyinen.haeX() - 1, nykyinen.haeY(), nykyinen, loppu);
+        kasittele(nykyinen.haeX(), nykyinen.haeY() + 1, nykyinen, loppu);
+        kasittele(nykyinen.haeX(), nykyinen.haeY() - 1, nykyinen, loppu);
         
-        // Mikäli kulmikkain liikkuminen on sallittu, käsitellään myös ne.
-        if(this.kulmikkain) {
-            käsittele(nykyinen.haeX() + 1, nykyinen.haeY() + 1, nykyinen, loppu);
-            käsittele(nykyinen.haeX() + 1, nykyinen.haeY() - 1, nykyinen, loppu);
-            käsittele(nykyinen.haeX() - 1, nykyinen.haeY() + 1, nykyinen, loppu);
-            käsittele(nykyinen.haeX() - 1, nykyinen.haeY() - 1, nykyinen, loppu);
+        // Mikali kulmikkain liikkuminen on sallittu, kasitellaan myos ne.
+        if (this.kulmikkain) {
+            kasittele(nykyinen.haeX() + 1, nykyinen.haeY() + 1, nykyinen, loppu);
+            kasittele(nykyinen.haeX() + 1, nykyinen.haeY() - 1, nykyinen, loppu);
+            kasittele(nykyinen.haeX() - 1, nykyinen.haeY() + 1, nykyinen, loppu);
+            kasittele(nykyinen.haeX() - 1, nykyinen.haeY() - 1, nykyinen, loppu);
         }
     }
     
     /**
-     * Tarkistaa tutkittavan solun kelvollisuuden, onko se lähempänä maalia, ja 
+     * Tarkistaa tutkittavan solun kelvollisuuden, onko se lahempana maalia, ja 
      * @param x
      * @param y
      * @param nykyinen
      * @param loppu 
      */
-    private void käsittele(int x, int y, Solmu nykyinen, Solmu loppu) {
-        double etäisyys = 1;
+    private void kasittele(int x, int y, Solmu nykyinen, Solmu loppu) {
+        double etaisyys = 1;
         
         // Onko kulmikkain liikkuminen sallittu?
         if (nykyinen.haeX() != x && nykyinen.haeY() != y && this.kulmikkain) {
-            etäisyys = Laskin.SQRT2;
+            etaisyys = Laskin.SQRT2;
         }
         
-        // Onko tutkittava solmu kartan sisällä, ja saako siihen liikkua?
-        if(x >= 0 && x < this.taulukko[0].length 
+        // Onko tutkittava solmu kartan sisalla, ja saako siihen liikkua?
+        if (x >= 0 && x < this.taulukko[0].length 
                 && y >= 0 && y < this.taulukko.length 
                 && !this.tilat[y][x]
                 && this.taulukko[y][x] == '.') {
             
-            // Onko lyhyempää reittiä vielä löytynyt?
-            if(nykyinen.haeEtäisyysAlkuun() + etäisyys < this.etäisyydet[y][x]) {
-                double yhteensä = nykyinen.haeEtäisyysAlkuun() + etäisyys;
-                this.etäisyydet[y][x] = yhteensä;
-                Solmu seuraava = new Solmu(x, y, yhteensä, nykyinen);
+            // Onko lyhyempaa reittia viela loytynyt?
+            if (nykyinen.haeEtaisyysAlkuun() + etaisyys < this.etaisyydet[y][x]) {
+                double yhteensa = nykyinen.haeEtaisyysAlkuun() + etaisyys;
+                this.etaisyydet[y][x] = yhteensa;
+                Solmu seuraava = new Solmu(x, y, yhteensa, nykyinen);
                 if (this.manhattan) {
-                    seuraava.asetaEtäisyysMaaliin(Laskin.manhattanEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                    seuraava.asetaEtaisyysMaaliin(Laskin.manhattanEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
                 } else {
-                    seuraava.asetaEtäisyysMaaliin(Laskin.euklidinenEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                    seuraava.asetaEtaisyysMaaliin(Laskin.euklidinenEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
                 }
-                keko.lisää(seuraava);
+                keko.lisaa(seuraava);
             }
         }
     }
     
     /**
-     * Palauttaa löydetyn reitin
-     * Taulukossa 1 merkitsee solua jossa on käyty haun aikana.
+     * Palauttaa loydetyn reitin
+     * Taulukossa 1 merkitsee solua jossa on kayty haun aikana.
      * 2 merkitsee solua joka kuuluu reittiin.
-     * @return taulukko jossa merkittynä käydyt solmut ja reitti
+     * @return taulukko jossa merkittyna kaydyt solmut ja reitti
      */
     public int[][] haeReitti() {
         return this.reitti;

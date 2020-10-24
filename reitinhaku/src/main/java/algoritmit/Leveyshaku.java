@@ -15,9 +15,9 @@ import tietorakenteet.Solmu;
 public class Leveyshaku {
     
     Jono jono;
-    int lukumäärä;
+    int lukumaara;
     char[][] taulukko;
-    boolean[][] käyty;
+    boolean[][] kayty;
     int[][] reitti;
     int pituus = 0;
     long aikaAlussa;
@@ -25,55 +25,55 @@ public class Leveyshaku {
     
     public Leveyshaku(char[][] taulukko) {
         this.taulukko = taulukko;
-        this.käyty = new boolean[taulukko.length][taulukko[0].length];
+        this.kayty = new boolean[taulukko.length][taulukko[0].length];
         this.reitti = new int[taulukko.length][taulukko[0].length];
         this.jono = new Jono();
     }
     
     /**
-     * Hakee leveyshakua käyttäen reitin Solmusta alku Solmuun loppu.
-     * @param alku Lähtösolmu
+     * Hakee leveyshakua kayttaen reitin Solmusta alku Solmuun loppu.
+     * @param alku Lahtösolmu
      * @param loppu Maalisolmu
-     * @return 1 mikäli reitti löytyy, -1 mikäli reittiä ei ole olemassa.
+     * @return 1 mikali reitti löytyy, -1 mikali reittia ei ole olemassa.
      */
     public double etsiReitti(Solmu alku, Solmu loppu) {
         this.aikaAlussa = System.nanoTime();
-        this.lukumäärä = 0;
-        this.jono.lisää(alku);
+        this.lukumaara = 0;
+        this.jono.lisaa(alku);
         
-        // Käydään jonoa läpi, kunnes päästään maalisolmuun, tai solmut loppuvat
-        while(!jono.onTyhjä()) {
-            Solmu nykyinen = jono.otaEnsimmäinen();
-            this.käyty[nykyinen.haeY()][nykyinen.haeX()] = true;
+        // Kaydaan jonoa lapi, kunnes paastaan maalisolmuun, tai solmut loppuvat
+        while (!jono.onTyhja()) {
+            Solmu nykyinen = jono.otaEnsimmainen();
+            this.kayty[nykyinen.haeY()][nykyinen.haeX()] = true;
             this.reitti[nykyinen.haeY()][nykyinen.haeX()] = 1;
             
-            // Reitti löydettiin, merkataan se ja lopetetaan läpikäynti
+            // Reitti löydettiin, merkataan se ja lopetetaan lapikaynti
             if (nykyinen.equals(loppu)) {
                 merkkaaReitti(nykyinen);
                 this.aikaLopussa = System.nanoTime();
                 return pituus;
             }
             
-            // BFS toimii vain painottomissa verkoissa, eli ei kulmikkain siirtymistä
-            // Vieraillaan siis kaikissa viereisissä solmuissa
-            käsittele(nykyinen.haeX() + 1, nykyinen.haeY(), nykyinen);
-            käsittele(nykyinen.haeX() - 1, nykyinen.haeY(), nykyinen);
-            käsittele(nykyinen.haeX(), nykyinen.haeY() + 1, nykyinen);
-            käsittele(nykyinen.haeX(), nykyinen.haeY() - 1, nykyinen);
+            // BFS toimii vain painottomissa verkoissa, eli ei kulmikkain siirtymista
+            // Vieraillaan siis kaikissa viereisissa solmuissa
+            kasittele(nykyinen.haeX() + 1, nykyinen.haeY(), nykyinen);
+            kasittele(nykyinen.haeX() - 1, nykyinen.haeY(), nykyinen);
+            kasittele(nykyinen.haeX(), nykyinen.haeY() + 1, nykyinen);
+            kasittele(nykyinen.haeX(), nykyinen.haeY() - 1, nykyinen);
             
         }
         return -1;
     }
     
     /**
-     * Käy rekursiivisesti läpi reitin Solmut ja merkkaa ne taulukkoon
+     * Kay rekursiivisesti lapi reitin Solmut ja merkkaa ne taulukkoon
      * @param loppu 
      */
     private void merkkaaReitti(Solmu loppu) {
         pituus++;
         this.reitti[loppu.haeY()][loppu.haeX()] = 2;
         Solmu vanhempi = loppu.haeVanhempi();
-        if(vanhempi != null) {
+        if (vanhempi != null) {
             merkkaaReitti(vanhempi);
         }
     }
@@ -83,24 +83,24 @@ public class Leveyshaku {
     }
     
     /**
-     * Tarkastaa onko annettu kohta kelvollinen ja lisää sen jonoon.
+     * Tarkastaa onko annettu kohta kelvollinen ja lisaa sen jonoon.
      * @param x x-koordinaatti
      * @param y y-koordinaatti
      * @param nykyinen Solmu josta tutkittavaan kohtaaan siirryttiin.
      */
-    private void käsittele(int x, int y, Solmu nykyinen) {
-        if(x >= 0 && x < this.taulukko[0].length 
+    private void kasittele(int x, int y, Solmu nykyinen) {
+        if (x >= 0 && x < this.taulukko[0].length 
                 && y >= 0 && y < this.taulukko.length 
-                && !this.käyty[y][x]
+                && !this.kayty[y][x]
                 && this.taulukko[y][x] == '.') {
-            this.jono.lisää(new Solmu(x, y, 0, nykyinen));
-            this.käyty[y][x] = true;
+            this.jono.lisaa(new Solmu(x, y, 0, nykyinen));
+            this.kayty[y][x] = true;
         }
     }
     
     /**
      * Palauttaa löydetyn reitin.
-     * Taulukossa on arvo 1, mikäli solussa on käyty ja 2 mikäli solu kuuluu reittiin.
+     * Taulukossa on arvo 1, mikali solussa on kayty ja 2 mikali solu kuuluu reittiin.
      * @return Löydetty reitti taulukossa.
      */
     public int[][] haeReitti() {

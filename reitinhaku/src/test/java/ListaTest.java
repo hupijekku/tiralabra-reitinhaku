@@ -47,18 +47,18 @@ public class ListaTest {
     @Test
     public void listaKasvaaTarvittaessa() {
         Lista lista = new Lista();
-        assertEquals(0, lista.haeMäärä());
+        assertEquals(0, lista.haeMaara());
         for (int i = 0; i < 100; i++) {
-            lista.lisää(new Solmu(1, i, 5, null));
+            lista.lisaa(new Solmu(1, i, 5, null));
         }
-        assertEquals(100, lista.haeMäärä());
+        assertEquals(100, lista.haeMaara());
     }
     
     @Test
     public void haeIndeksiPalauttaaNullJosVirheellinenParametri() {
         Lista lista = new Lista();
         for (int i = 0; i < 100; i++) {
-            lista.lisää(new Solmu(1, i, 5, null));
+            lista.lisaa(new Solmu(1, i, 5, null));
         }
         assertEquals(null, lista.haeIndeksi(105));
     }
@@ -67,9 +67,9 @@ public class ListaTest {
     public void poistaIndeksiEiPoistaJosVirheellinenParametri() {
         Lista lista = new Lista();
         for (int i = 0; i < 100; i++) {
-            lista.lisää(new Solmu(1, i, 5, null));
+            lista.lisaa(new Solmu(1, i, 5, null));
         }
         lista.poistaIndeksi(105);
-        assertEquals(100, lista.haeMäärä());
+        assertEquals(100, lista.haeMaara());
     }
 }

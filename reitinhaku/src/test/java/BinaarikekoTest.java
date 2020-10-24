@@ -58,12 +58,12 @@ public class BinaarikekoTest {
         Solmu s1 = new Solmu(1, 2, 3, null);
         Solmu s2 = new Solmu(1, 2, 5, null);
         Solmu s3 = new Solmu(1, 2, 1, null);
-        keko.lisää(s1);
-        keko.lisää(s2);
-        keko.lisää(s3);
-        assertEquals(s3, keko.otaPäällimmäinen());
-        assertEquals(s3, keko.poistaPäällimmäinen());
-        assertEquals(s1, keko.poistaPäällimmäinen());
+        keko.lisaa(s1);
+        keko.lisaa(s2);
+        keko.lisaa(s3);
+        assertEquals(s3, keko.otaPaallimmainen());
+        assertEquals(s3, keko.poistaPaallimmainen());
+        assertEquals(s1, keko.poistaPaallimmainen());
     }
     
     @Test
@@ -72,16 +72,16 @@ public class BinaarikekoTest {
         Random rnd = new Random(1337);
         for (int i = 0; i < 100; i++) {
             Solmu s = new Solmu(i, i, rnd.nextInt(10000), null);
-            keko.lisää(s);
+            keko.lisaa(s);
         }
-        assertEquals(28, keko.poistaPäällimmäinen().haeEtäisyysAlkuun(), 0.0001);
+        assertEquals(28, keko.poistaPaallimmainen().haeEtaisyysAlkuun(), 0.0001);
     }
     
     @Test
     public void onTyhjaToimii() {
         Binaarikeko keko = new Binaarikeko();
-        assertEquals(true, keko.onTyhjä());
-        keko.lisää(new Solmu(1, 2, 3, null));
-        assertEquals(false, keko.onTyhjä());
+        assertEquals(true, keko.onTyhja());
+        keko.lisaa(new Solmu(1, 2, 3, null));
+        assertEquals(false, keko.onTyhja());
     }
 }

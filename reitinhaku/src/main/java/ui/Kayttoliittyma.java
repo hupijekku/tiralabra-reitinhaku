@@ -57,7 +57,7 @@ public class Kayttoliittyma extends Application {
         
         Label lblAlgoritminValinta = new Label("Valitse algoritmi");
         Label lblKartanValinta = new Label("Valitse kartta");
-        Label lblAlku = new Label("Lähtöpiste");
+        Label lblAlku = new Label("Lahtopiste");
         Label lblLoppu = new Label("Maali");
         ComboBox<String> cbKartanValinta = new ComboBox();
         ComboBox<String> cbAlgoritminValinta = new ComboBox();
@@ -96,9 +96,9 @@ public class Kayttoliittyma extends Application {
         menuAsettelu.getChildren().add(menuHaeReittiNappi);
 
         
-        Insets hienosäätö = new Insets(10, 10, 10, 10);
-        menuAsettelu.setPadding(hienosäätö);
-        //menuKartanValinta.setPadding(hienosäätö);
+        Insets hienosaato = new Insets(10, 10, 10, 10);
+        menuAsettelu.setPadding(hienosaato);
+        //menuKartanValinta.setPadding(hienosaato);
         menuAsettelu.setSpacing(10);
         //menuKartanValinta.setSpacing(10);
         
@@ -124,16 +124,16 @@ public class Kayttoliittyma extends Application {
         menuAsettelu.getChildren().add(menuSuoritaTestit);
         
         btnTestit.setOnAction(event -> {
-           Suorituskykytesti.suoritaTestit(true);
+            Suorituskykytesti.suoritaTestit(true);
         });
         
         btnHaeReitti.setOnAction(event -> {
             grafiikka.clearRect(0, 0, piirtoalusta.getWidth(), piirtoalusta.getHeight());
             Kartta kartta = new Kartta(new File("./kartat/" + cbKartanValinta.getValue().toString()));
             char[][] taulukko = kartta.luoTaulukko();
-            int pikselinKoko = piirtoAlueenKoko/Laskin.maksimi(taulukko.length, taulukko[0].length);
-            piirräKartta(taulukko, grafiikka, pikselinKoko);
-            //try {
+            int pikselinKoko = piirtoAlueenKoko / Laskin.maksimi(taulukko.length, taulukko[0].length);
+            piirraKartta(taulukko, grafiikka, pikselinKoko);
+            try {
                 int x1 = Integer.parseInt(tfAlkuX.getText());
                 int y1 = Integer.parseInt(tfAlkuY.getText());
                 int x2 = Integer.parseInt(tfLoppuX.getText());
@@ -142,44 +142,44 @@ public class Kayttoliittyma extends Application {
                 if (x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0 ||
                         x1 >= taulukko[0].length || x2 >= taulukko[0].length ||
                         y1 >= taulukko.length || y2 >= taulukko.length) {
-                    virheViesti("Virheellinen syöte", "Varmista että koordinaatit ovat kartta-alueen sisällä");
+                    virheViesti("Virheellinen syote", "Varmista etta koordinaatit ovat kartta-alueen sisalla");
                 } else {
                     Solmu alku = new Solmu(x1, y1);
                     Solmu loppu = new Solmu(x2, y2);
-                    double löytyi = -1;
+                    double loytyi = -1;
                     int[][] reitti = new int[0][0];
                     long aika = 0;
                     switch (cbAlgoritminValinta.getValue().toString()) {
                         case "AStar":
                             AStar hakuAStar = new AStar(taulukko, true, true);
-                            löytyi = hakuAStar.etsiReitti(alku, loppu);
+                            loytyi = hakuAStar.etsiReitti(alku, loppu);
                             reitti = hakuAStar.haeReitti();
                             aika = hakuAStar.kulunutAika();
                             break;
                         case "Jump Point Search":
                             JPS hakuJPS = new JPS(taulukko, false);
-                            löytyi = hakuJPS.etsiReitti(alku, loppu);
+                            loytyi = hakuJPS.etsiReitti(alku, loppu);
                             reitti = hakuJPS.haeReitti();
                             aika = hakuJPS.kulunutAika();
                             break;
                         case "Leveyshaku":
                             Leveyshaku hakuBFS = new Leveyshaku(taulukko);
-                            löytyi = hakuBFS.etsiReitti(alku, loppu);
+                            loytyi = hakuBFS.etsiReitti(alku, loppu);
                             reitti = hakuBFS.haeReitti();
                             aika = hakuBFS.kulunutAika();
                             break;
                     }
-                    System.out.println(löytyi);
-                    System.out.println("Aika: " + (aika/1e9) + " s");
+                    System.out.println(loytyi);
+                    System.out.println("Aika: " + (aika / 1e9) + " s");
                     Color polku = Color.RED;
-                    piirräReitti(taulukko, grafiikka, reitti, pikselinKoko);
+                    piirraReitti(taulukko, grafiikka, reitti, pikselinKoko);
                     grafiikka.setFill(polku);
                     grafiikka.fillRect(x1 * pikselinKoko, y1 * pikselinKoko, pikselinKoko, pikselinKoko);
                     grafiikka.fillRect(x2 * pikselinKoko, y2 * pikselinKoko, pikselinKoko, pikselinKoko);
                 }
-            //} catch (Exception e) {
-            //    virheViesti("Virheellinen syöte", e.toString());
-            //}
+            } catch (Exception e) {
+                virheViesti("Virheellinen syote", e.toString());
+            }
         });
         
 
@@ -189,28 +189,28 @@ public class Kayttoliittyma extends Application {
     }
     
     
-    public void piirräKartta(char[][] merkit, GraphicsContext grafiikka, int pikselinKoko) {
-        Color seinä = Color.BLACK;
-        Color tyhjä = Color.WHITE;
+    public void piirraKartta(char[][] merkit, GraphicsContext grafiikka, int pikselinKoko) {
+        Color seina = Color.BLACK;
+        Color tyhja = Color.WHITE;
         Color puu = Color.GREEN;
         Color vesi = Color.BLUE;
         for (int i = 0; i < merkit[0].length; i++) {
             for (int j = 0; j < merkit.length; j++) {
                 if (merkit[j][i] == '@') {
-                    grafiikka.setFill(seinä);
+                    grafiikka.setFill(seina);
                 } else if (merkit[j][i] == 'W') {
                     grafiikka.setFill(vesi);
                 } else if (merkit[j][i] == 'T') {
                     grafiikka.setFill(puu);
                 } else {
-                    grafiikka.setFill(tyhjä);
+                    grafiikka.setFill(tyhja);
                 }
                 grafiikka.fillRect(i * pikselinKoko, j * pikselinKoko, pikselinKoko, pikselinKoko);
             }
         }
     }
     
-    public void piirräReitti(char[][] merkit, GraphicsContext grafiikka, int[][] reitti, int pikselinKoko) {
+    public void piirraReitti(char[][] merkit, GraphicsContext grafiikka, int[][] reitti, int pikselinKoko) {
         for (int i = 0; i < merkit[0].length; i++) {
             for (int j = 0; j < merkit.length; j++) {
                 if (reitti[j][i] == 1) {
@@ -239,13 +239,13 @@ public class Kayttoliittyma extends Application {
     * Virheviesti-ikkuna
     * 
     * @param    otsikko   Virheen tyyppi
-    * @param    sisältö   Kuvaus virheestä
+    * @param    sisalto   Kuvaus virheesta
     */  
-    public void virheViesti(String otsikko, String sisältö) {
+    public void virheViesti(String otsikko, String sisalto) {
         Alert errorBox = new Alert(AlertType.ERROR);
         errorBox.setTitle("Virhe!");
         errorBox.setHeaderText(otsikko);
-        errorBox.setContentText(sisältö);
+        errorBox.setContentText(sisalto);
         errorBox.showAndWait();
     }
 }
