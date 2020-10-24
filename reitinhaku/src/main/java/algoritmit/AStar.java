@@ -5,8 +5,9 @@
  */
 package algoritmit;
 
-import tietorakenteet.Binäärikeko;
+import tietorakenteet.Binaarikeko;
 import tietorakenteet.Solmu;
+import tyokalut.Laskin;
 
 /**
  * AStar reitinhakualgoritmi
@@ -19,15 +20,18 @@ public class AStar {
     private boolean[][] tilat;
     private double[][] etäisyydet;
     public boolean kulmikkain;
-    private int monessakoKäyty;
-    public Binäärikeko keko;
+    private boolean manhattan;
+    public Binaarikeko keko;
     // TODO: Fibonacci-keko?
     
-    public AStar(char[][] taulukko, boolean kulmikkain) {
+    long aikaAlussa;
+    long aikaLopussa;
+    
+    public AStar(char[][] taulukko, boolean kulmikkain, boolean manhattan) {
         this.kulmikkain = kulmikkain;
+        this.manhattan = manhattan;
         this.taulukko = taulukko;
-        keko = new Binäärikeko();
-        this.monessakoKäyty = 0;
+        keko = new Binaarikeko();
         this.tilat = new boolean[taulukko.length][taulukko[0].length];
         this.reitti = new int[taulukko.length][taulukko[0].length];
         this.etäisyydet = new double[taulukko.length][taulukko[0].length];
@@ -40,11 +44,6 @@ public class AStar {
         }
     }
     
-    // Etäisyys loppusolmuun
-    // TODO: Math-kirjaston käyttö vissiin kielletty?
-    private double laskeEtäisyys(int x, int y, Solmu maali) {
-        return Math.sqrt(Math.pow(maali.haeX() - x, 2) + Math.pow(maali.haeY() - y, 2));
-    }
     
     /**
      * Etsii reitin parametreina annetusta solmusta toiseen.
@@ -53,6 +52,7 @@ public class AStar {
      * @return Palauttaa reitin pituuden, -1 jos reittiä ei löydy
      */
     public double etsiReitti(Solmu alku, Solmu loppu) {
+        this.aikaAlussa = System.nanoTime();
         alku.asetaEtäisyysAlkuun(0);
         this.etäisyydet[alku.haeY()][alku.haeX()] = 0;
         keko.lisää(alku);
@@ -61,16 +61,17 @@ public class AStar {
             Solmu nykyinen = keko.poistaPäällimmäinen();
             this.reitti[nykyinen.haeY()][nykyinen.haeX()] = 1;
             this.tilat[nykyinen.haeY()][nykyinen.haeX()] = true;
-            this.monessakoKäyty++;
             
             // Reitti löydettiin, merkkaa se ja palauta pituus
             if(nykyinen.equals(loppu)) {
                 merkkaaReitti(nykyinen);
+                this.aikaLopussa = System.nanoTime();
                 return this.etäisyydet[nykyinen.haeY()][nykyinen.haeX()];
             }
             // Tarkista viereiset solmut ja lisää kekoon.
             haeSeuraavat(nykyinen, loppu);
         }
+        this.aikaLopussa = System.nanoTime();
         return -1;
     }
     
@@ -84,6 +85,10 @@ public class AStar {
         if(vanhempi != null) {
             merkkaaReitti(vanhempi);
         }
+    }
+    
+    public long kulunutAika() {
+        return this.aikaLopussa - this.aikaAlussa;
     }
     
     // Siirry kaikkiin viereisiin solmuihin
@@ -115,7 +120,7 @@ public class AStar {
         
         // Onko kulmikkain liikkuminen sallittu?
         if (nykyinen.haeX() != x && nykyinen.haeY() != y && this.kulmikkain) {
-            etäisyys = Math.sqrt(2);
+            etäisyys = Laskin.SQRT2;
         }
         
         // Onko tutkittava solmu kartan sisällä, ja saako siihen liikkua?
@@ -129,7 +134,11 @@ public class AStar {
                 double yhteensä = nykyinen.haeEtäisyysAlkuun() + etäisyys;
                 this.etäisyydet[y][x] = yhteensä;
                 Solmu seuraava = new Solmu(x, y, yhteensä, nykyinen);
-                seuraava.asetaEtäisyysMaaliin(laskeEtäisyys(x, y, loppu));
+                if (this.manhattan) {
+                    seuraava.asetaEtäisyysMaaliin(Laskin.manhattanEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                } else {
+                    seuraava.asetaEtäisyysMaaliin(Laskin.euklidinenEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                }
                 keko.lisää(seuraava);
             }
         }
@@ -145,11 +154,4 @@ public class AStar {
         return this.reitti;
     }
     
-    /**
-     * Palauttaa haun aikana käytyjen solmujen lukumäärän
-     * @return käydyt solmut
-     */
-    public int haeKäyty() {
-        return this.monessakoKäyty;
-    }
 }

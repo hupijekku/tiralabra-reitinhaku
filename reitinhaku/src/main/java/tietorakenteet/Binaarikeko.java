@@ -10,12 +10,12 @@ package tietorakenteet;
  * Säilöö Solmu-olioita. Pienimmän etäisyyden solmu sijaitsee indeksissä 0.
  * @author eemes
  */
-public class Binäärikeko {
+public class Binaarikeko {
     
     private Solmu[] keko;
     private int lukumäärä;
     
-    public Binäärikeko() {
+    public Binaarikeko() {
         this.lukumäärä = 0;
         this.keko = new Solmu[50];
     }

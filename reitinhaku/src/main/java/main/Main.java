@@ -1,7 +1,7 @@
 package main;
 
-import hupijekku.reitinhaku.ui.Kayttoliittyma;
-
+import ui.Kayttoliittyma;
+import tyokalut.Suorituskykytesti;
 /**
  *
  * @author eemes

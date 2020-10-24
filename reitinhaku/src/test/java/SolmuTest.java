@@ -122,5 +122,19 @@ public class SolmuTest {
          
          assertEquals(0, solmu1.compareTo(solmu2));
          assertEquals(-1, solmu2.compareTo(solmu3));
+         assertEquals(1, solmu3.compareTo(solmu2));
+     }
+     
+     @Test
+     public void equalsFalseJosEiOleSolmu() {
+         Solmu solmu1 = new Solmu(1, 2, 3, null);
+         Object o = new Object();
+         assertEquals(false, solmu1.equals(o));
+     }
+     
+     @Test
+     public void compareToNollaJosNull() {
+         Solmu solmu1 = new Solmu(1, 2, 3, null);
+         assertEquals(0, solmu1.compareTo(null));
      }
 }

@@ -5,9 +5,10 @@
  */
 package algoritmit;
 
-import tietorakenteet.Binäärikeko;
+import tietorakenteet.Binaarikeko;
 import tietorakenteet.Lista;
 import tietorakenteet.Solmu;
+import tyokalut.Laskin;
 
 /**
  *
@@ -19,15 +20,17 @@ public class JPS {
     private int[][] reitti;
     private boolean[][] tilat;
     private double[][] etäisyydet;
-    private int monessakoKäyty;
-    public Binäärikeko keko;
+    public Binaarikeko keko;
     private Lista naapurit;
     boolean reittiLöytyi = false;
+    boolean manhattan;
+    long aikaAlussa;
+    long aikaLopussa;
     
-    public JPS(char[][] taulukko) {
+    public JPS(char[][] taulukko, boolean manhattan) {
         this.taulukko = taulukko;
-        keko = new Binäärikeko();
-        this.monessakoKäyty = 0;
+        this.manhattan = manhattan;
+        keko = new Binaarikeko();
         this.tilat = new boolean[taulukko.length][taulukko[0].length];
         this.reitti = new int[taulukko.length][taulukko[0].length];
         this.etäisyydet = new double[taulukko.length][taulukko[0].length];
@@ -41,17 +44,17 @@ public class JPS {
     }
     
     public double etsiReitti(Solmu alku, Solmu loppu) {
+        this.aikaAlussa = System.nanoTime();
         this.keko.lisää(alku);
         this.etäisyydet[alku.haeY()][alku.haeX()] = 0;
         while(!this.keko.onTyhjä()) {
             Solmu nykyinen = this.keko.poistaPäällimmäinen();
             this.reitti[nykyinen.haeY()][nykyinen.haeX()] = 2;
             this.tilat[nykyinen.haeY()][nykyinen.haeX()] = true;
-            this.monessakoKäyty++;
             if (nykyinen.equals(loppu)) {
                 // Reitti löytyi
-                System.out.println("Reitti!");
                 merkkaaReitti(nykyinen);
+                this.aikaLopussa = System.nanoTime();
                 return this.etäisyydet[nykyinen.haeY()][nykyinen.haeX()];
             }
             haeSeuraavat(nykyinen, loppu);
@@ -61,8 +64,9 @@ public class JPS {
         return -1;
     }
     
-    private double laskeEtäisyys(int x, int y, int vx, int vy) {
-        return Math.sqrt(Math.pow(vx - x, 2) + Math.pow(vy - y, 2));
+    
+    public long kulunutAika() {
+        return this.aikaLopussa - this.aikaAlussa;
     }
     
     private void merkkaaReitti(Solmu solmu) {
@@ -110,19 +114,23 @@ public class JPS {
          this.naapurit = karsiNaapurit(nykyinen);
          for (int i = 0; i < this.naapurit.haeMäärä(); i++) {
              Solmu naapuri = this.naapurit.haeIndeksi(i);
-             this.reitti[naapuri.haeY()][naapuri.haeX()] = 1;
+             this.reitti[naapuri.haeY()][naapuri.haeX()] = 3;
              int[] hyppypiste = hyppää(naapuri.haeX(), naapuri.haeY(), nykyinen.haeX(), nykyinen.haeY(), loppu);
              if (hyppypiste[0] != -1 && hyppypiste[1] != -1) {
                  // Hyppypiste löytyi
                  
                  int y = hyppypiste[0];
                  int x = hyppypiste[1];
-                 double etäisyys = laskeEtäisyys(x, y, nykyinen.haeX(), nykyinen.haeY()) + nykyinen.haeEtäisyysAlkuun();
+                 double etäisyys = Laskin.euklidinenEtaisyys(x, y, nykyinen.haeX(), nykyinen.haeY()) + nykyinen.haeEtäisyysAlkuun();
                  if (this.etäisyydet[y][x] > etäisyys) {
                      this.etäisyydet[y][x] = etäisyys;
                      Solmu hyppySolmu = new Solmu(x, y, etäisyys, nykyinen);
-                     hyppySolmu.asetaEtäisyysMaaliin(laskeEtäisyys(x, y, loppu.haeX(), loppu.haeY()));
-                     this.reitti[y][x] = 1;
+                     if (manhattan) {
+                         hyppySolmu.asetaEtäisyysMaaliin(Laskin.euklidinenEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                     } else {
+                         hyppySolmu.asetaEtäisyysMaaliin(Laskin.manhattanEtaisyys(x, y, loppu.haeX(), loppu.haeY()));
+                     }
+                     this.reitti[y][x] = 3;
                      
                      this.keko.lisää(hyppySolmu);
                      if(reittiLöytyi) break;
@@ -140,14 +148,14 @@ public class JPS {
         int y = nykyinen.haeY();
         int vx = vanhempi.haeX();
         int vy = vanhempi.haeY();
-        int dx = (x-vx)/Math.max(Math.abs(x-vx), 1);
-        int dy = (y-vy)/Math.max(Math.abs(y-vy), 1);
+        int dx = (x-vx)/Laskin.maksimi(Laskin.itseisarvo(x-vx), 1);
+        int dy = (y-vy)/Laskin.maksimi(Laskin.itseisarvo(y-vy), 1);
         
         Lista karsitutNaapurit = new Lista();
         double etäisyys = 0;
         //Kulmikkain
         if (dx != 0 && dy != 0) {
-            etäisyys = Math.sqrt(2);
+            etäisyys = Laskin.SQRT2;
             boolean löytyi = false;
             if (ruutuKelpaa(x, y+dy)) {
                 karsitutNaapurit.lisää(new Solmu(x, y+dy, etäisyys, nykyinen));
@@ -157,14 +165,14 @@ public class JPS {
                 karsitutNaapurit.lisää(new Solmu(x+dx, y, etäisyys, nykyinen));
                 löytyi = true;
             }
-            if (löytyi) {
+            if (löytyi && ruutuKelpaa(x + dx, y + dy)) {
                 karsitutNaapurit.lisää(new Solmu(x+dx, y+dy, etäisyys, nykyinen));
             }
             // Pakotetut naapurit
-            if (!ruutuKelpaa(x-dx, y) && ruutuKelpaa(x, y+dy)) {
+            if (!ruutuKelpaa(x - dx, y) && ruutuKelpaa(x, y + dy) && ruutuKelpaa(x - dx, y + dy)) {
                 karsitutNaapurit.lisää(new Solmu(x-dx, y+dy, etäisyys, nykyinen));
             }
-            if(!ruutuKelpaa(x, y-dy) && ruutuKelpaa(x+dx, y)) {
+            if(!ruutuKelpaa(x, y - dy) && ruutuKelpaa(x + dx, y) && ruutuKelpaa(x + dx, y - dy)) {
                 karsitutNaapurit.lisää(new Solmu(x+dx, y-dy, etäisyys, nykyinen));
             }   
         }
@@ -173,25 +181,25 @@ public class JPS {
             etäisyys = 1;
             // Pystysuunta
             if (dx == 0) {
-                if (ruutuKelpaa(x, y+dy)) {
-                    karsitutNaapurit.lisää(new Solmu(x, y+dy, etäisyys, nykyinen));
-                    if (!ruutuKelpaa(x+1, y)) {
-                        karsitutNaapurit.lisää(new Solmu(x+1, y+dy, etäisyys, nykyinen));
+                if (ruutuKelpaa(x, y + dy)) {
+                    karsitutNaapurit.lisää(new Solmu(x, y + dy, etäisyys, nykyinen));
+                    if (!ruutuKelpaa(x + 1, y) && ruutuKelpaa(x + 1, y + dy)) {
+                        karsitutNaapurit.lisää(new Solmu(x + 1, y + dy, etäisyys, nykyinen));
                     }
-                    if (!ruutuKelpaa(x-1, y)) {
-                        karsitutNaapurit.lisää(new Solmu(x-1, y+dy, etäisyys, nykyinen));
+                    if (!ruutuKelpaa(x - 1, y) && ruutuKelpaa(x - 1, y + dy)) {
+                        karsitutNaapurit.lisää(new Solmu(x-1, y + dy, etäisyys, nykyinen));
                     }
                 }
             }
             // Vaakasuunta
             else {
-                if (ruutuKelpaa(x+dx, y)) {
-                    karsitutNaapurit.lisää(new Solmu(x+dx, y, etäisyys, nykyinen));
-                    if (!ruutuKelpaa(x, y+1)) {
-                        karsitutNaapurit.lisää(new Solmu(x+dx, y+1, etäisyys, nykyinen));
+                if (ruutuKelpaa(x + dx, y)) {
+                    karsitutNaapurit.lisää(new Solmu(x + dx, y, etäisyys, nykyinen));
+                    if (!ruutuKelpaa(x, y + 1) && ruutuKelpaa(x + dx, y + 1)) {
+                        karsitutNaapurit.lisää(new Solmu(x + dx, y + 1, etäisyys, nykyinen));
                     }
-                    if (!ruutuKelpaa(x, y-1)) {
-                        karsitutNaapurit.lisää(new Solmu(x+dx, y-1, etäisyys, nykyinen));
+                    if (!ruutuKelpaa(x, y - 1) && ruutuKelpaa(x + dx, y - 1)) {
+                        karsitutNaapurit.lisää(new Solmu(x + dx, y - 1, etäisyys, nykyinen));
                     }
                 }
             }
@@ -208,7 +216,7 @@ public class JPS {
                 if(i != x || j != y) {
                     double etäisyys = 0;
                     if (i != x && j != y) {
-                        etäisyys = nykyinen.haeEtäisyysAlkuun() + Math.sqrt(2);
+                        etäisyys = nykyinen.haeEtäisyysAlkuun() + Laskin.SQRT2;
                     } else {
                         etäisyys = nykyinen.haeEtäisyysAlkuun() + 1;
                     }
@@ -220,8 +228,8 @@ public class JPS {
     }
     
     public int[] hyppää(int x, int y, int vx, int vy, Solmu loppu) {
-        int dx = (x-vx)/Math.max(Math.abs(x-vx),1);
-        int dy = (y-vy)/Math.max(Math.abs(y-vy),1);
+        int dx = (x-vx)/Laskin.maksimi(Laskin.itseisarvo(x-vx),1);
+        int dy = (y-vy)/Laskin.maksimi(Laskin.itseisarvo(y-vy),1);
 
         int[] piste = {-1, -1};
         
@@ -230,7 +238,7 @@ public class JPS {
         }
         
         if (this.reitti[y][x] == 0) {
-            this.reitti[y][x] = 3;
+            this.reitti[y][x] = 1;
         }
         
         if(x == loppu.haeX() && y == loppu.haeY()) {

@@ -20,6 +20,9 @@ public class Leveyshaku {
     boolean[][] käyty;
     int[][] reitti;
     int pituus = 0;
+    long aikaAlussa;
+    long aikaLopussa;
+    
     public Leveyshaku(char[][] taulukko) {
         this.taulukko = taulukko;
         this.käyty = new boolean[taulukko.length][taulukko[0].length];
@@ -34,6 +37,7 @@ public class Leveyshaku {
      * @return 1 mikäli reitti löytyy, -1 mikäli reittiä ei ole olemassa.
      */
     public double etsiReitti(Solmu alku, Solmu loppu) {
+        this.aikaAlussa = System.nanoTime();
         this.lukumäärä = 0;
         this.jono.lisää(alku);
         
@@ -46,6 +50,7 @@ public class Leveyshaku {
             // Reitti löydettiin, merkataan se ja lopetetaan läpikäynti
             if (nykyinen.equals(loppu)) {
                 merkkaaReitti(nykyinen);
+                this.aikaLopussa = System.nanoTime();
                 return pituus;
             }
             
@@ -71,6 +76,10 @@ public class Leveyshaku {
         if(vanhempi != null) {
             merkkaaReitti(vanhempi);
         }
+    }
+    
+    public long kulunutAika() {
+        return this.aikaLopussa - this.aikaAlussa;
     }
     
     /**

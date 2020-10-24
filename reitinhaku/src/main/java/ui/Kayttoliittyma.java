@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hupijekku.reitinhaku.ui;
+package ui;
 
 import dao.Kartta;
 import java.io.File;
@@ -30,7 +30,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import tietorakenteet.Solmu;
-import tietorakenteet.Binäärikeko;
+import tietorakenteet.Binaarikeko;
+import tyokalut.Laskin;
+import tyokalut.Suorituskykytesti;
 
 /**
  *
@@ -51,6 +53,7 @@ public class Kayttoliittyma extends Application {
         HBox menuHaeReittiNappi = new HBox(1);
         HBox menuAsetaAlkuSolmu = new HBox(3);
         HBox menuAsetaLoppuSolmu = new HBox(3);
+        HBox menuSuoritaTestit = new HBox(1);
         
         Label lblAlgoritminValinta = new Label("Valitse algoritmi");
         Label lblKartanValinta = new Label("Valitse kartta");
@@ -59,6 +62,7 @@ public class Kayttoliittyma extends Application {
         ComboBox<String> cbKartanValinta = new ComboBox();
         ComboBox<String> cbAlgoritminValinta = new ComboBox();
         Button btnHaeReitti = new Button("Hae Reitti");
+        Button btnTestit = new Button("Aja suorituskykytestit");
         TextField tfAlkuX = new TextField("0");
         TextField tfAlkuY = new TextField("0");
         TextField tfLoppuX = new TextField("0");
@@ -84,7 +88,6 @@ public class Kayttoliittyma extends Application {
         menuAlgoritminValinta.getChildren().add(lblAlgoritminValinta);
         menuAlgoritminValinta.getChildren().add(cbAlgoritminValinta);
         menuAsettelu.getChildren().add(menuAlgoritminValinta);
-        
         
         menuHaeReittiNappi.getChildren().add(btnHaeReitti);
         
@@ -117,13 +120,20 @@ public class Kayttoliittyma extends Application {
         paneeli.getChildren().add(menu);
         GraphicsContext grafiikka = piirtoalusta.getGraphicsContext2D();
         
+        menuSuoritaTestit.getChildren().add(btnTestit);
+        menuAsettelu.getChildren().add(menuSuoritaTestit);
+        
+        btnTestit.setOnAction(event -> {
+           Suorituskykytesti.suoritaTestit(true);
+        });
+        
         btnHaeReitti.setOnAction(event -> {
             grafiikka.clearRect(0, 0, piirtoalusta.getWidth(), piirtoalusta.getHeight());
             Kartta kartta = new Kartta(new File("./kartat/" + cbKartanValinta.getValue().toString()));
             char[][] taulukko = kartta.luoTaulukko();
-            int pikselinKoko = piirtoAlueenKoko/Math.max(taulukko.length, taulukko[0].length);
+            int pikselinKoko = piirtoAlueenKoko/Laskin.maksimi(taulukko.length, taulukko[0].length);
             piirräKartta(taulukko, grafiikka, pikselinKoko);
-            try {
+            //try {
                 int x1 = Integer.parseInt(tfAlkuX.getText());
                 int y1 = Integer.parseInt(tfAlkuY.getText());
                 int x2 = Integer.parseInt(tfLoppuX.getText());
@@ -138,33 +148,38 @@ public class Kayttoliittyma extends Application {
                     Solmu loppu = new Solmu(x2, y2);
                     double löytyi = -1;
                     int[][] reitti = new int[0][0];
+                    long aika = 0;
                     switch (cbAlgoritminValinta.getValue().toString()) {
                         case "AStar":
-                            AStar hakuAStar = new AStar(taulukko, true);
+                            AStar hakuAStar = new AStar(taulukko, true, true);
                             löytyi = hakuAStar.etsiReitti(alku, loppu);
                             reitti = hakuAStar.haeReitti();
+                            aika = hakuAStar.kulunutAika();
                             break;
                         case "Jump Point Search":
-                            JPS hakuJPS = new JPS(taulukko);
+                            JPS hakuJPS = new JPS(taulukko, false);
                             löytyi = hakuJPS.etsiReitti(alku, loppu);
                             reitti = hakuJPS.haeReitti();
+                            aika = hakuJPS.kulunutAika();
                             break;
                         case "Leveyshaku":
                             Leveyshaku hakuBFS = new Leveyshaku(taulukko);
                             löytyi = hakuBFS.etsiReitti(alku, loppu);
                             reitti = hakuBFS.haeReitti();
+                            aika = hakuBFS.kulunutAika();
                             break;
                     }
                     System.out.println(löytyi);
+                    System.out.println("Aika: " + (aika/1e9) + " s");
                     Color polku = Color.RED;
                     piirräReitti(taulukko, grafiikka, reitti, pikselinKoko);
                     grafiikka.setFill(polku);
                     grafiikka.fillRect(x1 * pikselinKoko, y1 * pikselinKoko, pikselinKoko, pikselinKoko);
                     grafiikka.fillRect(x2 * pikselinKoko, y2 * pikselinKoko, pikselinKoko, pikselinKoko);
                 }
-            } catch (Exception e) {
-                virheViesti("Virheellinen syöte", "Varmista että koordinaatit ovat numeroita.");
-            }
+            //} catch (Exception e) {
+            //    virheViesti("Virheellinen syöte", e.toString());
+            //}
         });
         
 
